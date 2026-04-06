@@ -1,66 +1,52 @@
-import React, { useState } from "react";
-import { Button, Card, CardContent, Typography } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, Typography } from "@mui/material";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("https://jsonplaceholder.typicode.com/posts?_limit=5")
+      .then((res) => res.json())
+      .then((data) => {
+        setPosts(data);
+        setLoading(false);
+      });
+  }, []);
 
   return (
     <div
-      style={{
-        height: "100vh",
-        background: "linear-gradient(to right, #4facfe, #00f2fe)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Card
-        style={{
-          width: "400px",
-          textAlign: "center",
-          padding: "30px",
-          borderRadius: "15px",
-          boxShadow: "0px 8px 20px rgba(0,0,0,0.2)",
-        }}
-      >
-        <CardContent>
-          <Typography variant="h4" gutterBottom>
-            Counter App 🚀
-          </Typography>
+       style={{
+         padding: "30px",
+         background: "linear-gradient(to right, #4facfe, #00f2fe)",
+         minHeight: "100vh",
+         display: "flex",
+         flexDirection: "column",
+         alignItems: "center",
+  }}
+>
+      <Typography variant="h4" style={{ textAlign: "center", marginBottom: "20px" }}>
+        API Data Dashboard 🚀
+      </Typography>
 
-          <Typography
-            variant="h2"
-            style={{ margin: "20px 0", fontWeight: "bold" }}
-          >
-            {count}
-          </Typography>
+      {loading && <Typography>Loading...</Typography>}
 
-          <div style={{ marginTop: "20px" }}>
-            <Button
-              variant="contained"
-              onClick={() => setCount(count + 1)}
-            >
-              Increase
-            </Button>
-
-            <Button
-              variant="outlined"
-              onClick={() => setCount(count - 1)}
-              style={{ marginLeft: "10px" }}
-            >
-              Decrease
-            </Button>
-          </div>
-
-          <Button
-            variant="text"
-            onClick={() => setCount(0)}
-            style={{ marginTop: "15px" }}
-          >
-            Reset
-          </Button>
-        </CardContent>
-      </Card>
+      {posts.map((post) => (
+        <Card
+  key={post.id}
+  style={{
+    marginBottom: "15px",
+    width: "600px",
+    borderRadius: "12px",
+    boxShadow: "0px 6px 15px rgba(0,0,0,0.2)",
+  }}
+>
+          <CardContent>
+            <Typography variant="h6">{post.title}</Typography>
+            <Typography>{post.body}</Typography>
+          </CardContent>
+        </Card>
+      ))}
     </div>
   );
 }
