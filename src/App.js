@@ -1,28 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 function App() {
   const [count, setCount] = useState(0);
+  const [items, setItems] = useState([]);
 
-  const increase = () => {
-    setCount(count + 1);
-  };
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCount((prev) => prev + 1);
+    }, 1000);
 
-  const decrease = () => {
-    setCount(count - 1);
+    return () => clearInterval(interval);
+  }, []);
+
+  const addItem = () => {
+    setItems([...items, `Item ${items.length + 1}`]);
   };
 
   return (
     <div style={{ textAlign: "center", marginTop: "50px" }}>
-      <h1>Willovate React Training 🚀</h1>
-      <h2>Counter: {count}</h2>
+      <h1>Day 2 Practice 🚀</h1>
 
-      <button onClick={increase}>Increase</button>
-      <button onClick={decrease} style={{ marginLeft: "10px" }}>
-        Decrease
-      </button>
-      <button onClick={() => setCount(0)} style={{ marginLeft: "10px" }}>
-  Reset
-</button>
+      <h2>Auto Counter: {count}</h2>
+
+      <button onClick={addItem}>Add Item</button>
+
+      <ul>
+        {items.map((item, index) => (
+          <li key={index}>{item}</li>
+        ))}
+      </ul>
     </div>
   );
 }
