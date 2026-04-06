@@ -1,52 +1,62 @@
-import React, { useState, useEffect } from "react";
-import { Card, CardContent, Typography } from "@mui/material";
+import React, { useState } from "react";
+import { TextField, Button, Card, CardContent, Typography } from "@mui/material";
 
 function App() {
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [input, setInput] = useState("");
+  const [result, setResult] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    fetch("https://jsonplaceholder.typicode.com/posts?_limit=5")
-      .then((res) => res.json())
-      .then((data) => {
-        setPosts(data);
-        setLoading(false);
-      });
-  }, []);
+  const handlePrediction = () => {
+    setLoading(true);
+    setResult("");
+
+    setTimeout(() => {
+      setResult(`Prediction for "${input}": Success 🚀`);
+      setLoading(false);
+    }, 2000);
+  };
 
   return (
     <div
-       style={{
-         padding: "30px",
-         background: "linear-gradient(to right, #4facfe, #00f2fe)",
-         minHeight: "100vh",
-         display: "flex",
-         flexDirection: "column",
-         alignItems: "center",
-  }}
->
-      <Typography variant="h4" style={{ textAlign: "center", marginBottom: "20px" }}>
-        API Data Dashboard 🚀
-      </Typography>
+      style={{
+        height: "100vh",
+        background: "linear-gradient(to right, #4facfe, #00f2fe)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Card style={{ width: "400px", padding: "20px", borderRadius: "15px" }}>
+        <CardContent style={{ textAlign: "center" }}>
+          <Typography variant="h5">ML Dashboard 🚀</Typography>
 
-      {loading && <Typography>Loading...</Typography>}
+          <TextField
+            label="Enter Input"
+            variant="outlined"
+            fullWidth
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            style={{ marginTop: "20px" }}
+          />
 
-      {posts.map((post) => (
-        <Card
-  key={post.id}
-  style={{
-    marginBottom: "15px",
-    width: "600px",
-    borderRadius: "12px",
-    boxShadow: "0px 6px 15px rgba(0,0,0,0.2)",
-  }}
->
-          <CardContent>
-            <Typography variant="h6">{post.title}</Typography>
-            <Typography>{post.body}</Typography>
-          </CardContent>
-        </Card>
-      ))}
+          <Button
+            variant="contained"
+            fullWidth
+            onClick={handlePrediction}
+            style={{ marginTop: "20px" }}
+          >
+            Run Model
+          </Button>
+
+          {loading && <Typography style={{ marginTop: "15px" }}>Loading...</Typography>}
+
+          {result && (
+            <Typography style={{ marginTop: "15px", fontWeight: "bold" }}>
+              {result}
+            </Typography>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }
