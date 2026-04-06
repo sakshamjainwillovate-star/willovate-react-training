@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import { TextField, Button, Card, CardContent, Typography } from "@mui/material";
 
 function App() {
-  const [input, setInput] = useState("");
+  const [name, setName] = useState("");
+  const [cgpa, setCgpa] = useState("");
+  const [attendance, setAttendance] = useState("");
   const [result, setResult] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -11,7 +13,10 @@ function App() {
     setResult("");
 
     setTimeout(() => {
-      setResult(`Prediction for "${input}": Success 🚀`);
+      let performance = cgpa >= 8 ? "Good" : "Average";
+      let risk = attendance < 75 ? "High" : "Low";
+
+      setResult(`Performance: ${performance}, Risk: ${risk}`);
       setLoading(false);
     }, 2000);
   };
@@ -28,15 +33,32 @@ function App() {
     >
       <Card style={{ width: "400px", padding: "20px", borderRadius: "15px" }}>
         <CardContent style={{ textAlign: "center" }}>
-          <Typography variant="h5">ML Dashboard 🚀</Typography>
+          <Typography variant="h5">Student ML Dashboard 🚀</Typography>
 
           <TextField
-            label="Enter Input"
-            variant="outlined"
+            label="Name"
             fullWidth
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            style={{ marginTop: "20px" }}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            style={{ marginTop: "15px" }}
+          />
+
+          <TextField
+            label="CGPA"
+            type="number"
+            fullWidth
+            value={cgpa}
+            onChange={(e) => setCgpa(e.target.value)}
+            style={{ marginTop: "15px" }}
+          />
+
+          <TextField
+            label="Attendance (%)"
+            type="number"
+            fullWidth
+            value={attendance}
+            onChange={(e) => setAttendance(e.target.value)}
+            style={{ marginTop: "15px" }}
           />
 
           <Button
