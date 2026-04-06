@@ -1,34 +1,66 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { Button, Card, CardContent, Typography } from "@mui/material";
 
 function App() {
   const [count, setCount] = useState(0);
-  const [items, setItems] = useState([]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCount((prev) => prev + 1);
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  const addItem = () => {
-    setItems([...items, `Item ${items.length + 1}`]);
-  };
 
   return (
-    <div style={{ textAlign: "center", marginTop: "50px" }}>
-      <h1>Day 2 Practice 🚀</h1>
+    <div
+      style={{
+        height: "100vh",
+        background: "linear-gradient(to right, #4facfe, #00f2fe)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Card
+        style={{
+          width: "400px",
+          textAlign: "center",
+          padding: "30px",
+          borderRadius: "15px",
+          boxShadow: "0px 8px 20px rgba(0,0,0,0.2)",
+        }}
+      >
+        <CardContent>
+          <Typography variant="h4" gutterBottom>
+            Counter App 🚀
+          </Typography>
 
-      <h2>Auto Counter: {count}</h2>
+          <Typography
+            variant="h2"
+            style={{ margin: "20px 0", fontWeight: "bold" }}
+          >
+            {count}
+          </Typography>
 
-      <button onClick={addItem}>Add Item</button>
+          <div style={{ marginTop: "20px" }}>
+            <Button
+              variant="contained"
+              onClick={() => setCount(count + 1)}
+            >
+              Increase
+            </Button>
 
-      <ul>
-        {items.map((item, index) => (
-          <li key={index}>{item}</li>
-        ))}
-      </ul>
+            <Button
+              variant="outlined"
+              onClick={() => setCount(count - 1)}
+              style={{ marginLeft: "10px" }}
+            >
+              Decrease
+            </Button>
+          </div>
+
+          <Button
+            variant="text"
+            onClick={() => setCount(0)}
+            style={{ marginTop: "15px" }}
+          >
+            Reset
+          </Button>
+        </CardContent>
+      </Card>
     </div>
   );
 }
