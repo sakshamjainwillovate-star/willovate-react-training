@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { TextField, Button, Card, CardContent, Typography } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Card,
+  CardContent,
+  Typography,
+} from "@mui/material";
 
 function App() {
   const [name, setName] = useState("");
@@ -8,24 +14,31 @@ function App() {
   const [result, setResult] = useState("");
   const [loading, setLoading] = useState(false);
 
- const handlePrediction = async () => {
-  setLoading(true);
-  setResult("");
+  const handlePrediction = async () => {
+    if (!name || !cgpa || !attendance) {
+      setResult("Please fill all fields");
+      return;
+    }
 
-  try {
-    const response = await fetch("https://jsonplaceholder.typicode.com/posts/1");
-    const data = await response.json();
+    setLoading(true);
+    setResult("");
 
-    let performance = cgpa >= 8 ? "Good" : "Average";
-    let risk = attendance < 75 ? "High" : "Low";
+    try {
+      const response = await fetch(
+        "https://jsonplaceholder.typicode.com/posts/1"
+      );
+      await response.json();
 
-    setResult(`Performance: ${performance}, Risk: ${risk}`);
-  } catch (error) {
-    setResult("Error fetching data");
-  }
+      let performance = cgpa >= 8 ? "Good" : "Average";
+      let risk = attendance < 75 ? "High" : "Low";
 
-  setLoading(false);
-};
+      setResult(`Performance: ${performance}, Risk: ${risk}`);
+    } catch (error) {
+      setResult("Error fetching data");
+    }
+
+    setLoading(false);
+  };
 
   return (
     <div
@@ -37,36 +50,63 @@ function App() {
         alignItems: "center",
       }}
     >
-      <Card style={{ width: "400px", padding: "20px", borderRadius: "15px" }}>
+      <Card
+        style={{
+          width: "400px",
+          padding: "20px",
+          borderRadius: "15px",
+        }}
+      >
         <CardContent style={{ textAlign: "center" }}>
           <Typography variant="h5">Student ML Dashboard 🚀</Typography>
 
+          {/* Name with max 50 characters */}
           <TextField
             label="Name"
             fullWidth
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => {
+              if (e.target.value.length <= 50) {
+                setName(e.target.value);
+              }
+            }}
+            inputProps={{ maxLength: 50 }}
             style={{ marginTop: "15px" }}
           />
 
+          {/* CGPA (0–10 validation) */}
           <TextField
             label="CGPA"
             type="number"
             fullWidth
             value={cgpa}
-            onChange={(e) => setCgpa(e.target.value)}
+            onChange={(e) => {
+              let value = e.target.value;
+              if (value >= 0 && value <= 10) {
+                setCgpa(value);
+              }
+            }}
+            inputProps={{ min: 0, max: 10 }}
             style={{ marginTop: "15px" }}
           />
 
+          {/* Attendance (0–100 validation) */}
           <TextField
             label="Attendance (%)"
             type="number"
             fullWidth
             value={attendance}
-            onChange={(e) => setAttendance(e.target.value)}
+            onChange={(e) => {
+              let value = e.target.value;
+              if (value >= 0 && value <= 100) {
+                setAttendance(value);
+              }
+            }}
+            inputProps={{ min: 0, max: 100 }}
             style={{ marginTop: "15px" }}
           />
 
+          {/* Button */}
           <Button
             variant="contained"
             fullWidth
@@ -76,12 +116,31 @@ function App() {
             Run Model
           </Button>
 
-          {loading && <Typography style={{ marginTop: "15px" }}>Loading...</Typography>}
-
-          {result && (
-            <Typography style={{ marginTop: "15px", fontWeight: "bold" }}>
-              {result}
+          {/* Loading */}
+          {loading && (
+            <Typography style={{ marginTop: "15px" }}>
+              Loading...
             </Typography>
+          )}
+
+          {/* Result */}
+          {result && (
+            <Card
+              style={{
+                marginTop: "20px",
+                backgroundColor: "#e3f2fd",
+              }}
+            >
+              <CardContent>
+                <Typography variant="h6">
+                  Prediction Result
+                </Typography>
+
+                <Typography style={{ marginTop: "10px" }}>
+                  {result}
+                </Typography>
+              </CardContent>
+            </Card>
           )}
         </CardContent>
       </Card>
