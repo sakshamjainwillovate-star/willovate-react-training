@@ -8,18 +8,24 @@ function App() {
   const [result, setResult] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handlePrediction = () => {
-    setLoading(true);
-    setResult("");
+ const handlePrediction = async () => {
+  setLoading(true);
+  setResult("");
 
-    setTimeout(() => {
-      let performance = cgpa >= 8 ? "Good" : "Average";
-      let risk = attendance < 75 ? "High" : "Low";
+  try {
+    const response = await fetch("https://jsonplaceholder.typicode.com/posts/1");
+    const data = await response.json();
 
-      setResult(`Performance: ${performance}, Risk: ${risk}`);
-      setLoading(false);
-    }, 2000);
-  };
+    let performance = cgpa >= 8 ? "Good" : "Average";
+    let risk = attendance < 75 ? "High" : "Low";
+
+    setResult(`Performance: ${performance}, Risk: ${risk}`);
+  } catch (error) {
+    setResult("Error fetching data");
+  }
+
+  setLoading(false);
+};
 
   return (
     <div
